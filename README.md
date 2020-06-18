@@ -30,5 +30,5 @@ The master controller is mainly tasked with running the user display and sending
    1. On Linux, run `git clone https://github.com/apollobvm/apollobvm_pio.git` to clone the repo.
 3. Build the PlatformIO project with either the core toolchain or IDE plugins.
    1. On Linux, run `pio run` to build.
-4. Choose which environment to upload - master, slave, samd_master, and samd_slave - and specify with the `-e` flag.
+4. Choose which environment to upload - `master`, `slave`, `samd_master`, and `samd_slave` - and specify with the `-e` flag.
    1. On Linux, run `pio run -e desired_env -t upload` to upload.
