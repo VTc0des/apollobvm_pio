@@ -111,11 +111,11 @@ void setup()
 
   // Init panels.
   start_ptr = new EditPanel(&display, &enc, &encoder_button, &stop_button, &vs, &vl, "Confirm & Run?", &run_ptr, 0);
-  warning_ptr = new SplashPanel(&display, &enc, &encoder_button, &stop_button, &vs, warning_text, 2000, &start_ptr);
-  splash_ptr = new SplashPanel(&display, &enc, &encoder_button, &stop_button, &vs, splash_text, 2000, &warning_ptr);
-  apply_ptr = new EditPanel(&display, &enc, &encoder_button, &stop_button, &vs, &vl, "Apply Changes?", &run_ptr, &pause_ptr);
-  run_ptr = new RunningPanel(&display, &enc, &encoder_button, &stop_button, &vs, &apply_ptr, &pause_ptr);
-  pause_ptr = new PausePanel(&display, &enc, &encoder_button, &stop_button, &vs, &start_ptr, &run_ptr);
+  warning_ptr = new SplashPanel(warning_text, 2000, &start_ptr);
+  splash_ptr = new SplashPanel( splash_text, 2000, &warning_ptr);
+  apply_ptr = new EditPanel("Apply Changes?", &run_ptr, &pause_ptr);
+  run_ptr = new RunningPanel(&apply_ptr, &pause_ptr);
+  pause_ptr = new PausePanel(&start_ptr, &run_ptr);
 
   // Delay just cause.
   delay(100);
