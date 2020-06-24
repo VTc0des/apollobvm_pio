@@ -10,9 +10,6 @@
 class Panel {
 public:
   Panel();
-  Panel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-        ButtonManager *em_button_ptr, ButtonManager *stop_button_ptr,
-        VentSettings *vs_ptr, VentLimits *vl_ptr);
 
   // Virtual methods for each panel to inherit.
   virtual void start() = 0;
@@ -21,24 +18,21 @@ public:
   void updateTime();
 
 protected:
-  NhdDisplay *_disp_ptr;
+  // Pointer for display.
+  static NhdDisplay *_disp_ptr;
 
   // Pointers for user inputs.
-  Encoder *_encoder_ptr;
-  ButtonManager *_em_button_ptr;
-  ButtonManager *_stop_button_ptr;
+  static Encoder *_encoder_ptr;
+  static ButtonManager *_em_button_ptr;
+  static ButtonManager *_stop_button_ptr;
 
   // Pointers for system setting.
-  VentSettings *_vs_ptr;
-  VentLimits *_vl_ptr;
+  static VentSettings *_vs_ptr;
+  static VentLimits *_vl_ptr;
 };
 
 class SplashPanel : public Panel {
 public:
-  SplashPanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-              ButtonManager *em_button_ptr, ButtonManager *stop_button_ptr,
-              VentSettings *vs_ptr, VentLimits *vl_ptr, String *text,
-              int display_time, Panel **next_ptr);
   SplashPanel(String *text, int display_time, Panel **next_ptr);
 
   // Panel to display splash text for a specified amout of time.
@@ -59,10 +53,6 @@ private:
 
 class EditPanel : public Panel {
 public:
-  EditPanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-            ButtonManager *em_button_ptr, ButtonManager *stop_button_ptr,
-            VentSettings *vs_ptr, VentLimits *vl_ptr, String top_text,
-            Panel **run_panel_ptr, Panel **stop_panel_ptr);
   EditPanel(String top_text, Panel **run_panel_ptr, Panel **stop_panel_ptr);
 
   // Panel to edit ventilator parameters.
@@ -111,10 +101,6 @@ private:
 
 class RunningPanel : public Panel {
 public:
-  RunningPanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-               ButtonManager *em_button_ptr, ButtonManager *stop_button_ptr,
-               VentSettings *vs_ptr, VentLimits *vl_ptr,
-               Panel **apply_panel_ptr, Panel **stop_panel_ptr);
   RunningPanel(Panel **apply_panel_ptr, Panel **stop_panel_ptr);
 
   // Panel to display current time counter and current settings.
@@ -148,10 +134,6 @@ private:
 
 class PausePanel : public Panel {
 public:
-  PausePanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-             ButtonManager *em_button_ptr, ButtonManager *stop_button_ptr,
-             VentSettings *vs_ptr, VentLimits *vl_ptr, Panel **apply_panel_ptr,
-             Panel **run_panel_ptr);
   PausePanel(Panel **apply_panel_ptr, Panel **run_panel_ptr);
 
   // Panel to display time ventilated and settings during pause.

@@ -2,13 +2,6 @@
 
 Panel::Panel() {}
 
-Panel::Panel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-             ButtonManager *em_button_ptr, ButtonManager *stop_button_ptr,
-             VentSettings *vs_ptr, VentLimits *vl_ptr)
-    : _disp_ptr(disp_ptr), _encoder_ptr(encoder_ptr),
-      _em_button_ptr(em_button_ptr), _stop_button_ptr(stop_button_ptr),
-      _vs_ptr(vs_ptr), _vl_ptr(vl_ptr) {}
-
 void Panel::updateTime() {
   // Update and display time if a second has passed.
   if (!(millis() % 1000)) {
@@ -32,15 +25,6 @@ void Panel::updateTime() {
 SplashPanel::SplashPanel(String *text, int display_time, Panel **next_ptr)
     : _display_time(display_time), _text(text), _next_d_ptr(next_ptr) {}
 
-SplashPanel::SplashPanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-                         ButtonManager *em_button_ptr,
-                         ButtonManager *stop_button_ptr, VentSettings *vs_ptr,
-                         VentLimits *vl_ptr, String *text, int display_time,
-                         Panel **next_ptr)
-    : Panel(disp_ptr, encoder_ptr, em_button_ptr, stop_button_ptr, vs_ptr,
-            vl_ptr),
-      _display_time(display_time), _text(text), _next_d_ptr(next_ptr) {}
-
 void SplashPanel::start() {
 
   // Dereference double pointer to panel.
@@ -61,19 +45,6 @@ Panel *SplashPanel::update() {
   // Wait for time and then pass next panel.
   delay(_display_time);
   return _next_ptr;
-}
-
-EditPanel::EditPanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-                     ButtonManager *em_button_ptr,
-                     ButtonManager *stop_button_ptr, VentSettings *vs_ptr,
-                     VentLimits *vl_ptr, String top_text, Panel **run_panel_ptr,
-                     Panel **stop_panel_ptr)
-    : Panel(disp_ptr, encoder_ptr, em_button_ptr, stop_button_ptr, vs_ptr,
-            vl_ptr),
-      _top_text(top_text), _run_panel_d_ptr(run_panel_ptr),
-      _stop_panel_d_ptr(stop_panel_ptr) {
-  // Build new encoder manager with 4 selections.
-  _em_ptr = new EncoderManager(Panel::_encoder_ptr, 4);
 }
 
 EditPanel::EditPanel(String top_text, Panel **run_panel_ptr,
@@ -162,8 +133,8 @@ Panel *EditPanel::update() {
     _disp_ptr->blinkingOn();
 
     // Set encoder manager to give selections based on selected quantity.
-    int num_selections;
-    int starting_selection;
+    int num_selections = 0;
+    int starting_selection = 0;
 
     switch (_row) {
     // Set selections for tidal volume.
@@ -293,15 +264,6 @@ Panel *EditPanel::update() {
   return 0;
 }
 
-RunningPanel::RunningPanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-                           ButtonManager *em_button_ptr,
-                           ButtonManager *stop_button_ptr, VentSettings *vs_ptr,
-                           VentLimits *vl_ptr, Panel **apply_panel_ptr,
-                           Panel **stop_panel_ptr)
-    : Panel(disp_ptr, encoder_ptr, em_button_ptr, stop_button_ptr, vs_ptr,
-            vl_ptr),
-      _apply_panel_d_ptr(apply_panel_ptr), _stop_panel_d_ptr(stop_panel_ptr) {}
-
 RunningPanel::RunningPanel(Panel **apply_panel_ptr, Panel **stop_panel_ptr)
     : _apply_panel_d_ptr(apply_panel_ptr), _stop_panel_d_ptr(stop_panel_ptr) {}
 
@@ -364,18 +326,6 @@ Panel *RunningPanel::update() {
     _disp_ptr->print(formatTime());
   }
   return 0;
-}
-
-PausePanel::PausePanel(NhdDisplay *disp_ptr, Encoder *encoder_ptr,
-                       ButtonManager *em_button_ptr,
-                       ButtonManager *stop_button_ptr, VentSettings *vs_ptr,
-                       VentLimits *vl_ptr, Panel **apply_panel_ptr,
-                       Panel **run_panel_ptr)
-    : Panel(disp_ptr, encoder_ptr, em_button_ptr, stop_button_ptr, vs_ptr,
-            vl_ptr),
-      _apply_panel_d_ptr(apply_panel_ptr), _run_panel_d_ptr(run_panel_ptr) {
-  // Build new encoder manager with 2 selections.
-  _em_ptr = new EncoderManager(Panel::_encoder_ptr, 2);
 }
 
 PausePanel::PausePanel(Panel **apply_panel_ptr, Panel **run_panel_ptr)

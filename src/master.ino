@@ -33,19 +33,20 @@ String* splash_text = new String[4];
 String* warning_text = new String[4];
 
 // Init panel pointers.
-// TODO: Changed pointer type to be Panel, check this works.
 Panel* splash_ptr;
 Panel* warning_ptr;
 Panel* start_ptr;
 Panel* apply_ptr;
 Panel* run_ptr;
 Panel* pause_ptr;
-/* SplashPanel* splash_ptr; */
-/* SplashPanel* warning_ptr; */
-/* EditPanel* start_ptr; */
-/* EditPanel* apply_ptr; */
-/* RunningPanel* run_ptr; */
-/* PausePanel* pause_ptr; */
+
+// Set static pointers for panels.
+NhdDisplay* Panel::_disp_ptr = &display;
+Encoder* Panel::_encoder_ptr = &enc;
+ButtonManager* Panel::_em_button_ptr = &encoder_button;
+ButtonManager* Panel::_stop_button_ptr = &stop_button;
+VentSettings* Panel::_vs_ptr = &vs;
+VentLimits* Panel::_vl_ptr = &vl;
 
 // Init display panel pointer.
 Panel* cur_panel;
@@ -110,7 +111,7 @@ void setup()
   warning_text[3] = "";
 
   // Init panels.
-  start_ptr = new EditPanel(&display, &enc, &encoder_button, &stop_button, &vs, &vl, "Confirm & Run?", &run_ptr, 0);
+  start_ptr = new EditPanel("Confirm & Run?", &run_ptr, 0);
   warning_ptr = new SplashPanel(warning_text, 2000, &start_ptr);
   splash_ptr = new SplashPanel( splash_text, 2000, &warning_ptr);
   apply_ptr = new EditPanel("Apply Changes?", &run_ptr, &pause_ptr);
