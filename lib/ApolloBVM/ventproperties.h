@@ -1,7 +1,13 @@
 #ifndef ventsettings_h
 #define ventsettings_h
 
-typedef struct  {
+#include "Encoder.h"
+#include "buttonmanager.h"
+#include "encodermanager.h"
+#include "nhd_0420d3z.h"
+#include "pins.h"
+
+typedef struct {
 
   // Current slave mode.
   char mode;
@@ -21,6 +27,9 @@ typedef struct  {
   int hours;
   int minute;
   int seconds;
+
+  // Alarm status.
+  bool alarm;
 
   // Boolean to indicate to send settings.
   bool send;
@@ -43,4 +52,22 @@ typedef struct {
   int delta_exhale = 1;
 
 } VentLimits;
+
+class VentIO {
+
+public:
+  VentIO()
+      : display{DISPLAY_PIN}, enc{ENC_DT_PIN, ENC_CLK_PIN},
+        encoder_button{ENC_BUTTON_PIN, true}, stop_button{STOP_BUTTON_PIN,
+                                                          false},
+        limit_right{LIMIT_RIGHT_PIN, true}, limit_left{LIMIT_LEFT_PIN, true} {}
+
+  NhdDisplay display;
+  Encoder enc;
+  ButtonManager encoder_button;
+  ButtonManager stop_button;
+  ButtonManager limit_right;
+  ButtonManager limit_left;
+};
+
 #endif

@@ -3,24 +3,20 @@
 #include "panel.h"
 #include "Wire.h"
 
-// Address of slave.
-#define SLAVE_ADDR 8
-
-// Pin definitions.
-#define DISPLAY_PIN 3
-#define ENC_CLK_PIN 6
-#define ENC_DT_PIN 5
-#define ENC_BUTTON_PIN 7
-#define STOP_BUTTON_PIN 11
-
 // Init peripherals.
-NhdDisplay display(DISPLAY_PIN);
-Encoder enc(ENC_DT_PIN, ENC_CLK_PIN);
-ButtonManager encoder_button(ENC_BUTTON_PIN, true);
-ButtonManager stop_button(STOP_BUTTON_PIN, false);
+/* NhdDisplay display(DISPLAY_PIN); */
+/* Encoder enc(ENC_DT_PIN, ENC_CLK_PIN); */
+/* ButtonManager encoder_button(ENC_BUTTON_PIN, true); */
+/* ButtonManager stop_button(STOP_BUTTON_PIN, false); */
+// TODO: Change the normally closed state tot he correct one.
+/* ButtonManager limit_right(LIMIT_RIGHT_PIN, true); */
+/* ButtonManager limit_left(LIMIT_LEFT_PIN, true); */
+
+// Initialize ventilator state object.
+VentIO vio;
 
 // Default settings.
-VentSettings vs = {'X', 500, 12, 1, 3, 0, 00, 20, 0, 0, 0, false}; 
+VentSettings vs = {'X', 500, 12, 1, 3, 0, 00, 20, 0, 0, 0, false, false}; 
 
 // Default limits.
 VentLimits vl;
@@ -41,12 +37,14 @@ Panel* run_ptr;
 Panel* pause_ptr;
 
 // Set static pointers for panels.
-NhdDisplay* Panel::_disp_ptr = &display;
-Encoder* Panel::_encoder_ptr = &enc;
-ButtonManager* Panel::_em_button_ptr = &encoder_button;
-ButtonManager* Panel::_stop_button_ptr = &stop_button;
+NhdDisplay* Panel::_disp_ptr = &vio.display;
+Encoder* Panel::_encoder_ptr = &vio.enc;
+ButtonManager* Panel::_em_button_ptr = &vio.encoder_button;
+ButtonManager* Panel::_stop_button_ptr = &vio.stop_button;
 VentSettings* Panel::_vs_ptr = &vs;
 VentLimits* Panel::_vl_ptr = &vl;
+VentIO* Panel::_vio_ptr = &vio;
+/* VentAlarm* Panel::_va_ptr = &va; */
 
 // Init display panel pointer.
 Panel* cur_panel;
@@ -85,6 +83,14 @@ void transmit() {
   vs.send = false;
 }
 
+/* void checkAlarm() */
+/* { */
+
+/*   int near = digitalRead(NEAR_PIN); */
+
+
+/* } */
+
 void setup()
 {
 
@@ -94,9 +100,12 @@ void setup()
   // Start serial debug connection.
   Serial.begin(9600);
 
+  // Set digital read pin for when arms are close to 0.
+  pinMode(NEAR_PIN, INPUT);
+
   // Start display.
-  display.begin(9600);
-  display.clearDisplay();
+  vio.display.begin(9600);
+  vio.display.clearDisplay();
 
   // Init slash text.
   splash_text[0] = "";
@@ -131,8 +140,8 @@ void loop()
 {
 
   // Poll button status.
-  encoder_button.poll();
-  stop_button.poll();
+  vio.encoder_button.poll();
+  vio.stop_button.poll();
 
   // Update current panel.
   Panel* new_panel = cur_panel->update();

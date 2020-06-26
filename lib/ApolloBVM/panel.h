@@ -5,7 +5,7 @@
 #include "buttonmanager.h"
 #include "encodermanager.h"
 #include "nhd_0420d3z.h"
-#include "ventsettings.h"
+#include "ventproperties.h"
 
 class Panel {
 public:
@@ -18,6 +18,8 @@ public:
   void updateTime();
 
 protected:
+  // Static pointer to ventilator IO.
+
   // Pointer for display.
   static NhdDisplay *_disp_ptr;
 
@@ -27,6 +29,7 @@ protected:
   static ButtonManager *_stop_button_ptr;
 
   // Pointers for system setting.
+  static VentIO *_vio_ptr;
   static VentSettings *_vs_ptr;
   static VentLimits *_vl_ptr;
 };
@@ -171,18 +174,15 @@ private:
   int _selection = 0;
 };
 
-/* class AlarmPanel : public Panel { */
+class AlarmPanel : public Panel {
 
-/*   public: */
-/*     AlarmPanel(NhdDisplay* disp_ptr, Encoder* encoder_ptr, ButtonManager*
- * em_button_ptr, ButtonManager* stop_button_ptr, VentSettings* vs_ptr, Panel**
- * apply_panel_ptr, Panel** run_panel_ptr); */
+public:
+  // Panel to display time ventilated and settings during pause.
+  void start() override;
+  Panel *update() override;
 
-/*     // Panel to display time ventilated and settings during pause. */
-/*     void start() override; */
-/*     Panel* update() override; */
-
-/*   private: */
-
-/* } */
+private:
+  String top_text;
+  String bottom_text;
+};
 #endif
