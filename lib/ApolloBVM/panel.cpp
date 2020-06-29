@@ -85,7 +85,7 @@ void EditPanel::start() {
 
   // Write third line and add default respiration rate value.
   _vio.disp.setCursor(1, 2);
-  _vio.disp.print(_rr_text + _vio.disp.zeroPad(_vs.respiration_rate) +
+  _vio.disp.print(_rr_text + NhdDisplay::zeroPad(_vs.respiration_rate) +
                   _rr_units);
 
   // Write fourth line and add default i:e ratio.
@@ -200,7 +200,7 @@ Panel *EditPanel::update() {
 
         // Write to the display.
         _vio.disp.setCursor(1 + _rr_text_length, 2);
-        _vio.disp.print(_vio.disp.zeroPad(_vs.respiration_rate));
+        _vio.disp.print(_vs.respiration_rate);
         break;
 
       // Edit i:e ratio.
@@ -262,8 +262,9 @@ RunningPanel::RunningPanel(Panel **apply_panel_ptr, Panel **stop_panel_ptr)
     : _apply_panel_d_ptr(apply_panel_ptr), _stop_panel_d_ptr(stop_panel_ptr) {}
 
 String RunningPanel::formatTime() {
-  return _vio.disp.zeroPad(_vs.hours) + ":" + _vio.disp.zeroPad(_vs.minute) +
-         ":" + _vio.disp.zeroPad(_vs.seconds);
+  return NhdDisplay::zeroPad(_vs.hours) + ":" +
+         NhdDisplay::zeroPad(_vs.minute) + ":" +
+         NhdDisplay::zeroPad(_vs.seconds);
 }
 
 void RunningPanel::start() {
@@ -289,7 +290,7 @@ void RunningPanel::start() {
 
   // Write third line and add default respiration rate value.
   _vio.disp.setCursor(1, 2);
-  _vio.disp.print(_rr_text + _vio.disp.zeroPad(_vs.respiration_rate) +
+  _vio.disp.print(_rr_text + NhdDisplay::zeroPad(_vs.respiration_rate) +
                   _rr_units);
 
   // Write fourth line and add default i:e ratio.
@@ -350,9 +351,9 @@ void PausePanel::start() {
   // Write first line.
   _vio.disp.setCursor(1, 0);
   _vio.disp.print(_top_before_time);
-  _vio.disp.print(_vio.disp.zeroPad(_vs.hours) + ":" +
-                  _vio.disp.zeroPad(_vs.minute) + ":" +
-                  _vio.disp.zeroPad(_vs.seconds));
+  _vio.disp.print(NhdDisplay::zeroPad(_vs.hours) + ":" +
+                  NhdDisplay::zeroPad(_vs.minute) + ":" +
+                  NhdDisplay::zeroPad(_vs.seconds));
   _vio.disp.print(_top_after_time);
 
   // Write second line and add default tidal volume value.
