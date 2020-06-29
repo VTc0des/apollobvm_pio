@@ -1,28 +1,18 @@
-/* #include "etl/delegate.h" */
-/* #include "etl/vector.h" */
 #include "panel.h"
 #include "ventproperties.h"
-/* #include <ArduinoSTL.h> */
 
-/* #ifdef SAMD */
-/* #include <vector> */
-/* #else */
-/* #include <ArduinoSTL.h> */
-/* #include <estd/functional.h> */
-/* #include <estd/vector.h> */
-/* using AlarmFunc = estd::function<bool(VentIO *)>; */
-/* #endif */
-
-/* using AlarmFunc = etl::delegate<bool(VentIO *)>; */
-/* using AlarmFunc = std::function<bool(VentIO *)>; */
-/* using AlarmFunc = std::function<VentIO *, bool>; */
-using AlarmFunc = bool (*)(const VentIO &vio);
+using AlarmFunc = bool (*)(VentIO &vio);
 
 enum Color { red, orange, green };
 
 class Alarm {
 
 public:
+  // Default constructor and destructor for array creation in AlarmManager.
+  Alarm() {}
+  ~Alarm() {}
+
+  // Populating constructor.
   Alarm(AlarmFunc condition, bool blink_led = true, Color led_color = red,
         bool stop_running = true, bool sound_buzzer = true,
         int display_time = -1, bool cancelable = false, String top_text = "top",
@@ -56,7 +46,10 @@ public:
 class AlarmManager {
 
 public:
-  AlarmManager(const VentIO &vio) : _vio(vio), _prev_time(0) {}
+  AlarmManager(VentIO &vio, int num_alarms)
+      : _vio(vio), _alarms_len(num_alarms), _prev_time(0) {
+    _alarms = new Alarm[num_alarms];
+  }
 
   void addAlarm(int idx, const Alarm &a);
   void addAlarm(int idx, AlarmFunc condition, bool blink_led, Color led_color,
@@ -68,14 +61,14 @@ public:
 
 private:
   // Ventilator IO reference.
-  const VentIO &_vio;
+  VentIO &_vio;
 
   // Array of alarms to evaluate.
   Alarm *_alarms;
   int _alarms_len;
 
   // Alarm Panel instance.
-  AlarmPanel _alarm_panel;
+  /* AlarmPanel _alarm_panel; */
 
   // Number of mashine cycles alarm condition has to be valid to be
   // considered triggered.

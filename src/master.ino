@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "panel.h"
 #include "Wire.h"
+#include "alarm.h"
 
 // Init peripherals.
 /* NhdDisplay display(DISPLAY_PIN); */
@@ -43,6 +44,9 @@ VentIO& Panel::_vio= vio;
 
 // Init display panel pointer.
 Panel* cur_panel;
+
+// Init Alarm management system.
+AlarmManager am = AlarmManager(vio, 1);
 
 void transmit() {
 
@@ -98,6 +102,9 @@ void setup()
   // Set digital read pin for when arms are close to 0.
   pinMode(NEAR_PIN, INPUT);
 
+  // Add system alarms to AlarmManager.
+  am.addAlarm(0, Alarm([](VentIO &vio) { return vio.stop_button.getButtonState(); }));
+
   // Start display.
   vio.disp.begin(9600);
   vio.disp.clearDisplay();
@@ -137,6 +144,10 @@ void loop()
   // Poll button status.
   vio.enc_button.poll();
   vio.stop_button.poll();
+
+  if (am.evaluate()) {
+    Serial.println("Alarm triggered!");
+  }
 
   // Update current panel.
   Panel* new_panel = cur_panel->update();

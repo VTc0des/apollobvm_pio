@@ -1,12 +1,8 @@
 #include "buttonmanager.h"
 
-
-ButtonManager::ButtonManager(int pin, bool high_default):
-  _last_state(false),
-  _debounce_delay(100),
-  _button_pin(pin),
-  _high_default(high_default) {}
-
+ButtonManager::ButtonManager(int pin, bool high_default)
+    : _button_pin(pin), _high_default(high_default), _last_state(false),
+      _debounce_delay(100) {}
 
 void ButtonManager::poll() {
 
@@ -18,11 +14,11 @@ void ButtonManager::poll() {
 
   // Set different logic for different default button states.
   if (_high_default) {
-    if (digitalRead(_button_pin) == LOW){
+    if (digitalRead(_button_pin) == LOW) {
       reading = true;
     }
   } else {
-    if (digitalRead(_button_pin) == HIGH){
+    if (digitalRead(_button_pin) == HIGH) {
       reading = true;
     }
   }
@@ -33,7 +29,8 @@ void ButtonManager::poll() {
     _last_debounce = millis();
   }
 
-  // If the reading has been there longer than the debounce, we accept its state.
+  // If the reading has been there longer than the debounce, we accept its
+  // state.
   if ((millis() - _last_debounce) > _debounce_delay) {
 
     // If the button state has changed.
@@ -49,12 +46,9 @@ void ButtonManager::poll() {
 
   // Save the previous reading for the next poll.
   _last_state = reading;
-
 }
 
-bool ButtonManager::getButtonState(){
+bool ButtonManager::getButtonState() {
   // Return the toggle state.
   return _trigger;
 }
-
-
