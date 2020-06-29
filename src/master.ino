@@ -4,15 +4,6 @@
 #include "Wire.h"
 #include "alarm.h"
 
-// Init peripherals.
-/* NhdDisplay display(DISPLAY_PIN); */
-/* Encoder enc(ENC_DT_PIN, ENC_CLK_PIN); */
-/* ButtonManager encoder_button(ENC_BUTTON_PIN, true); */
-/* ButtonManager stop_button(STOP_BUTTON_PIN, false); */
-// TODO: Change the normally closed state tot he correct one.
-/* ButtonManager limit_right(LIMIT_RIGHT_PIN, true); */
-/* ButtonManager limit_left(LIMIT_LEFT_PIN, true); */
-
 // Initialize ventilator state object.
 VentIO vio;
 
@@ -82,14 +73,6 @@ void transmit() {
   vs.send = false;
 }
 
-/* void checkAlarm() */
-/* { */
-
-/*   int near = digitalRead(NEAR_PIN); */
-
-
-/* } */
-
 void setup()
 {
 
@@ -103,7 +86,6 @@ void setup()
   pinMode(NEAR_PIN, INPUT);
 
   // Add system alarms to AlarmManager.
-  am.addAlarm(0, Alarm([](VentIO &vio) { return vio.stop_button.getButtonState(); }));
 
   // Start display.
   vio.disp.begin(9600);
@@ -128,6 +110,11 @@ void setup()
   apply_ptr = new EditPanel("Apply Changes?", &run_ptr, &pause_ptr);
   run_ptr = new RunningPanel(&apply_ptr, &pause_ptr);
   pause_ptr = new PausePanel(&start_ptr, &run_ptr);
+
+  /* am.addAlarm(0, Alarm([](VentIO &vio) { */ 
+  /*       return false; })); */
+  am.addAlarm(0, Alarm([](VentIO &vio) { 
+        return vio.enc_button.getButtonState(); }));
 
   // Delay just cause.
   delay(100);
@@ -161,6 +148,8 @@ void loop()
   // Transmit to the device if necessary.
   if (vs.send)
     transmit();
+
+  delay(1);
 }
 
 

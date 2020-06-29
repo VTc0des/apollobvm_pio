@@ -39,7 +39,7 @@ public:
 
   // Alarm state variables.
   /* bool prev_triggered; */
-  int time_triggered;
+  int time_triggered = 0;
   /* int cycles_triggered; */
 };
 
@@ -79,7 +79,7 @@ private:
   /* const int cycles_until_display = 3; */
 
   // Number of miliseconds an alarm must be triggered before we display.
-  const int _time_until_display = 500;
+  const int _time_until_display = 5;
 
   // Previous time alarm manager was run.
   int _prev_time;

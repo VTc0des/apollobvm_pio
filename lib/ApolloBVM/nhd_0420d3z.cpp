@@ -1,40 +1,31 @@
-#include "Arduino.h"
 #include "nhd_0420d3z.h"
+#include "Arduino.h"
 
+NhdDisplay::NhdDisplay(byte pin) : _row(0), _col(0) {
 
-NhdDisplay::NhdDisplay(byte pin):
-  _row(0),
-  _col(0) {
-
-  // Create a new hardware serial if we're on SAMD architecture.
-  #ifdef SAMD
+// Create a new hardware serial if we're on SAMD architecture.
+#ifdef SAMD
   _serial_ptr = new Uart(&sercom3, 0, 1, SERCOM_RX_PAD_1, UART_TX_PAD_0);
-  #else
+#else
   _serial_ptr = new SoftwareSerial(2, pin);
-  #endif
+#endif
 }
 
 void NhdDisplay::begin(int baud) {
   // Start Serial connection with default baud.
   _serial_ptr->begin(9600);
 
-  #ifdef SAMD
-  pinPeripheral(0, PIO_SERCOM); //Assign RX function to pin 0
-  pinPeripheral(1, PIO_SERCOM); //Assign TX function to pin 1
-  #endif
+#ifdef SAMD
+  pinPeripheral(0, PIO_SERCOM); // Assign RX function to pin 0
+  pinPeripheral(1, PIO_SERCOM); // Assign TX function to pin 1
+#endif
 }
 
-void NhdDisplay::print(String st) {
-  _serial_ptr->print(st);
-}
+void NhdDisplay::print(String st) { _serial_ptr->print(st); }
 
-void NhdDisplay::print(int val) {
-  _serial_ptr->print(String(val));
-}
+void NhdDisplay::print(int val) { _serial_ptr->print(String(val)); }
 
-void NhdDisplay::println(String st) {
-  _serial_ptr->println(st);
-}
+void NhdDisplay::println(String st) { _serial_ptr->println(st); }
 
 void NhdDisplay::setBacklight(byte brightness) {
 
@@ -61,17 +52,17 @@ void NhdDisplay::setCursor(byte cursor_position, byte line) {
   // Change the write value based on the line.
   // This is needed as the display write line 1 to 3 to 2 to 4.
   switch (line) {
-    case 1:
-      to_write += 0x40;
-      break;
-    case 2:
-      to_write += 0x14;
-      break;
-    case 3:
-      to_write += 0x54;
-      break;
+  case 1:
+    to_write += 0x40;
+    break;
+  case 2:
+    to_write += 0x14;
+    break;
+  case 3:
+    to_write += 0x54;
+    break;
   }
-  
+
   // Send special command byte.
   _serial_ptr->write(0xFE);
   // Send command to move the cursor.
@@ -81,7 +72,7 @@ void NhdDisplay::setCursor(byte cursor_position, byte line) {
 }
 
 void NhdDisplay::underlineOn() {
-  
+
   // Send special command byte.
   _serial_ptr->write(0xFE);
   // Send command to turn underline on.
@@ -137,20 +128,9 @@ void NhdDisplay::backspace() {
 }
 
 void NhdDisplay::remove() {
- 
+
   // Together these delete the current character.
   moveCursorRight();
   backspace();
 }
 
-String NhdDisplay::zeroPad(int in) {
-  // This helper function ensures integers have 2 decimal places.
-  
-  // Make a temp char array to hold the 2 digits.
-  char digit[2];
-
-  // Pad with a 0 if integer is 1 digit.
-  sprintf(digit, "%02d", in);
-
-  return String(digit);
-}

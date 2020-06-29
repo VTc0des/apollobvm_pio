@@ -14,25 +14,27 @@ void AlarmManager::addAlarm(int idx, AlarmFunc condition, bool blink_led,
 
 bool AlarmManager::evaluate() {
 
-  int delta_time = millis() - _prev_time;
-  _prev_time = millis();
+  /* int delta_time = millis() - _prev_time; */
+  /* _prev_time = millis(); */
 
   for (int i = 0; i < _alarms_len; i++) {
-    Alarm cur = _alarms[i];
     // Check if each alarm has been triggered.
-    if (cur.condition(_vio)) {
+    if (_alarms[i].condition(_vio)) {
       // Add the delta time to the total time this alarm has been triggered.
-      cur.time_triggered += delta_time;
+      /* cur.time_triggered += delta_time; */
+      _alarms[i].time_triggered++;
+      Serial.println(_alarms[i].time_triggered);
 
-      if (cur.time_triggered > _time_until_display) {
+      if (_alarms[i].time_triggered > _time_until_display) {
 
-        // TODO: Change the Alarm Panel to display this alarm.
+        /*   // TODO: Change the Alarm Panel to display this alarm. */
 
         return true;
       }
     } else {
-      // TODO: Add time that alarm hasn't been triggered for to know when to
-      // reset the time_triggered counter.
+      /* // TODO: Add time that alarm hasn't been triggered for to know when to
+       */
+      /* // reset the time_triggered counter. */
     }
   }
 
