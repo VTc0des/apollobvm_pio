@@ -36,15 +36,10 @@ Panel* apply_ptr;
 Panel* run_ptr;
 Panel* pause_ptr;
 
-// Set static pointers for panels.
-NhdDisplay* Panel::_disp_ptr = &vio.display;
-Encoder* Panel::_encoder_ptr = &vio.enc;
-ButtonManager* Panel::_em_button_ptr = &vio.encoder_button;
-ButtonManager* Panel::_stop_button_ptr = &vio.stop_button;
-VentSettings* Panel::_vs_ptr = &vs;
-VentLimits* Panel::_vl_ptr = &vl;
-VentIO* Panel::_vio_ptr = &vio;
-/* VentAlarm* Panel::_va_ptr = &va; */
+// Set static references for panels.
+VentSettings& Panel::_vs = vs;
+VentLimits& Panel::_vl= vl;
+VentIO& Panel::_vio= vio;
 
 // Init display panel pointer.
 Panel* cur_panel;
@@ -104,8 +99,8 @@ void setup()
   pinMode(NEAR_PIN, INPUT);
 
   // Start display.
-  vio.display.begin(9600);
-  vio.display.clearDisplay();
+  vio.disp.begin(9600);
+  vio.disp.clearDisplay();
 
   // Init slash text.
   splash_text[0] = "";
@@ -140,7 +135,7 @@ void loop()
 {
 
   // Poll button status.
-  vio.encoder_button.poll();
+  vio.enc_button.poll();
   vio.stop_button.poll();
 
   // Update current panel.

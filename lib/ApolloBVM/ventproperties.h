@@ -57,14 +57,13 @@ class VentIO {
 
 public:
   VentIO()
-      : display{DISPLAY_PIN}, enc{ENC_DT_PIN, ENC_CLK_PIN},
-        encoder_button{ENC_BUTTON_PIN, true}, stop_button{STOP_BUTTON_PIN,
-                                                          false},
+      : disp{DISPLAY_PIN}, enc{ENC_DT_PIN, ENC_CLK_PIN},
+        enc_button{ENC_BUTTON_PIN, true}, stop_button{STOP_BUTTON_PIN, false},
         limit_right{LIMIT_RIGHT_PIN, true}, limit_left{LIMIT_LEFT_PIN, true} {}
 
-  NhdDisplay display;
+  NhdDisplay disp;
   Encoder enc;
-  ButtonManager encoder_button;
+  ButtonManager enc_button;
   ButtonManager stop_button;
   ButtonManager limit_right;
   ButtonManager limit_left;

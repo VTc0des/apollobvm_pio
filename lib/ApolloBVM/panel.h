@@ -18,20 +18,10 @@ public:
   void updateTime();
 
 protected:
-  // Static pointer to ventilator IO.
-
-  // Pointer for display.
-  static NhdDisplay *_disp_ptr;
-
-  // Pointers for user inputs.
-  static Encoder *_encoder_ptr;
-  static ButtonManager *_em_button_ptr;
-  static ButtonManager *_stop_button_ptr;
-
   // Pointers for system setting.
-  static VentIO *_vio_ptr;
-  static VentSettings *_vs_ptr;
-  static VentLimits *_vl_ptr;
+  static VentIO &_vio;
+  static VentSettings &_vs;
+  static VentLimits &_vl;
 };
 
 class SplashPanel : public Panel {

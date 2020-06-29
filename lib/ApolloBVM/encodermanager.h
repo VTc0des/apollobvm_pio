@@ -10,8 +10,8 @@
 class EncoderManager {
 
 public:
-  EncoderManager(Encoder *encoder_ptr, int num_options);
-  EncoderManager(Encoder *encoder_ptr, int num_options, int starting);
+  EncoderManager(Encoder &encoder_ptr, int num_options);
+  EncoderManager(Encoder &encoder_ptr, int num_options, int starting);
 
   // Methods to manage state.
   void start();
@@ -31,7 +31,7 @@ private:
   const byte COUNTS_PER_STEP = 4;
 
   // Pointer to encoder interface for master.
-  Encoder *_encoder_ptr;
+  Encoder &_encoder;
 
   // Pointer to position, deleted on close.
   long *_pos_ptr;
