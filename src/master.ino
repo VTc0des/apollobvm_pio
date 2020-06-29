@@ -122,7 +122,7 @@ void setup()
   // Init panels.
   start_ptr = new EditPanel("Confirm & Run?", &run_ptr, 0);
   warning_ptr = new SplashPanel(warning_text, 2000, &start_ptr);
-  splash_ptr = new SplashPanel( splash_text, 2000, &warning_ptr);
+  splash_ptr = new SplashPanel(splash_text, 2000, &warning_ptr);
   apply_ptr = new EditPanel("Apply Changes?", &run_ptr, &pause_ptr);
   run_ptr = new RunningPanel(&apply_ptr, &pause_ptr);
   pause_ptr = new PausePanel(&start_ptr, &run_ptr);

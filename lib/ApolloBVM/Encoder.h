@@ -30,8 +30,6 @@
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
-#undef max
-#undef min
 #elif defined(WIRING)
 #include "Wiring.h"
 #else

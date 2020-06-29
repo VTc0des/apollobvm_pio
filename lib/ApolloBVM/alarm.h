@@ -1,9 +1,22 @@
+/* #include "etl/delegate.h" */
+/* #include "etl/vector.h" */
 #include "panel.h"
 #include "ventproperties.h"
-#include <functional>
-#include <vector>
+/* #include <ArduinoSTL.h> */
 
-using AlarmFunc = std::function<bool(VentIO *)>;
+/* #ifdef SAMD */
+/* #include <vector> */
+/* #else */
+/* #include <ArduinoSTL.h> */
+/* #include <estd/functional.h> */
+/* #include <estd/vector.h> */
+/* using AlarmFunc = estd::function<bool(VentIO *)>; */
+/* #endif */
+
+/* using AlarmFunc = etl::delegate<bool(VentIO *)>; */
+/* using AlarmFunc = std::function<bool(VentIO *)>; */
+/* using AlarmFunc = std::function<VentIO *, bool>; */
+using AlarmFunc = bool (*)(const VentIO &vio);
 
 enum Color { red, orange, green };
 
@@ -43,10 +56,10 @@ public:
 class AlarmManager {
 
 public:
-  AlarmManager(VentIO *vio_ptr) : vio_ptr(vio_ptr), prev_time(0) {}
+  AlarmManager(const VentIO &vio) : _vio(vio), _prev_time(0) {}
 
-  void addAlarm(Alarm a);
-  void addAlarm(AlarmFunc condition, bool blink_led, Color led_color,
+  void addAlarm(int idx, const Alarm &a);
+  void addAlarm(int idx, AlarmFunc condition, bool blink_led, Color led_color,
                 bool stop_running, bool sound_buzzer, int display_time,
                 bool cancelable, String top_text, String bottom_text);
   bool evaluate();
@@ -54,14 +67,15 @@ public:
   AlarmPanel *getAlarmPanel();
 
 private:
-  // Ventilator IO pointer.
-  VentIO *vio_ptr;
+  // Ventilator IO reference.
+  const VentIO &_vio;
 
-  // Vector of alarms to run.
-  std::vector<Alarm> alarms;
+  // Array of alarms to evaluate.
+  Alarm *_alarms;
+  int _alarms_len;
 
   // Alarm Panel instance.
-  AlarmPanel alarm_panel;
+  AlarmPanel _alarm_panel;
 
   // Number of mashine cycles alarm condition has to be valid to be
   // considered triggered.
@@ -72,8 +86,8 @@ private:
   /* const int cycles_until_display = 3; */
 
   // Number of miliseconds an alarm must be triggered before we display.
-  const int time_until_display = 500;
+  const int _time_until_display = 500;
 
   // Previous time alarm manager was run.
-  int prev_time;
+  int _prev_time;
 };
