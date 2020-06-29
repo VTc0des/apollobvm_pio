@@ -49,7 +49,7 @@ public:
     // This helper function ensures integers have 2 decimal places.
 
     // Make a temp char array to hold the 2 digits.
-    char digit[2];
+    char digit[4];
 
     // Pad with a 0 if integer is 1 digit.
     sprintf(digit, "%02d", in);
