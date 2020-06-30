@@ -3,6 +3,7 @@
 
 #include "Encoder.h"
 #include "buttonmanager.h"
+#include "buzzermanager.h"
 #include "encodermanager.h"
 #include "nhd_0420d3z.h"
 #include "pins.h"
@@ -59,7 +60,8 @@ public:
   VentIO()
       : disp{DISPLAY_PIN}, enc{ENC_DT_PIN, ENC_CLK_PIN},
         enc_button{ENC_BUTTON_PIN, true}, stop_button{STOP_BUTTON_PIN, false},
-        limit_right{LIMIT_RIGHT_PIN, true}, limit_left{LIMIT_LEFT_PIN, true} {}
+        limit_right{LIMIT_RIGHT_PIN, true}, limit_left{LIMIT_LEFT_PIN, true},
+        buzzer(BUZZER_PIN) {}
 
   NhdDisplay disp;
   Encoder enc;
@@ -67,6 +69,16 @@ public:
   ButtonManager stop_button;
   ButtonManager limit_right;
   ButtonManager limit_left;
+
+  BuzzerManager buzzer;
+
+  void poll() {
+    enc_button.poll();
+    stop_button.poll();
+    limit_right.poll();
+    limit_left.poll();
+    buzzer.poll();
+  }
 };
 
 #endif

@@ -1,4 +1,3 @@
-#include "panel.h"
 #include "ventproperties.h"
 
 using AlarmFunc = bool (*)(VentIO &vio);
@@ -56,8 +55,6 @@ public:
                 bool stop_running, bool sound_buzzer, int display_time,
                 bool cancelable, String top_text, String bottom_text);
   bool evaluate();
-
-  AlarmPanel *getAlarmPanel();
 
 private:
   // Ventilator IO reference.

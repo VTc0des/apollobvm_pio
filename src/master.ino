@@ -2,7 +2,6 @@
 #include <Arduino.h>
 #include "panel.h"
 #include "Wire.h"
-#include "alarm.h"
 
 // Initialize ventilator state object.
 VentIO vio;
@@ -129,9 +128,11 @@ void loop()
 {
 
   // Poll button status.
-  vio.enc_button.poll();
-  vio.stop_button.poll();
+  /* vio.enc_button.poll(); */
+  /* vio.stop_button.poll(); */
+  vio.poll();
 
+  // TODO: Get triggered alarm and set alarm panel.
   if (am.evaluate()) {
     Serial.println("Alarm triggered!");
   }

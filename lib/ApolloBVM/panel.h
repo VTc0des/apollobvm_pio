@@ -2,6 +2,7 @@
 #define panel_h
 
 #include "Encoder.h"
+#include "alarm.h"
 #include "buttonmanager.h"
 #include "encodermanager.h"
 #include "nhd_0420d3z.h"
@@ -172,7 +173,6 @@ public:
   Panel *update() override;
 
 private:
-  String top_text;
-  String bottom_text;
+  const Alarm &alarm;
 };
 #endif

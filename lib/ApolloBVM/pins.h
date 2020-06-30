@@ -12,3 +12,5 @@
 #define LIMIT_LEFT_PIN 21
 // TODO: Change this to an available pin.
 #define NEAR_PIN 22
+// TODO: Change this to a PWM functioning pin.
+#define BUZZER_PIN 23
