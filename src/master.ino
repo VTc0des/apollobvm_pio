@@ -132,12 +132,12 @@ void loop()
   /* vio.stop_button.poll(); */
   vio.poll();
 
-  Serial.println("Hi!");
+  /* Serial.println("Hi!"); */
 
   // TODO: Get triggered alarm and set alarm panel.
-  if (am.evaluate()) {
-    Serial.println("Alarm triggered!");
-  }
+  /* if (am.evaluate()) { */
+  /*   Serial.println("Alarm triggered!"); */
+  /* } */
 
   // Update current panel.
   Panel* new_panel = cur_panel->update();
