@@ -87,8 +87,8 @@ void setup()
   // Add system alarms to AlarmManager.
 
   // Start display.
-  vio.disp.begin(9600);
-  vio.disp.clearDisplay();
+  /* vio.disp.begin(9600); */
+  /* vio.disp.clearDisplay(); */
 
   // Init slash text.
   splash_text[0] = "";
@@ -131,6 +131,8 @@ void loop()
   /* vio.enc_button.poll(); */
   /* vio.stop_button.poll(); */
   vio.poll();
+
+  Serial.println("Hi!");
 
   // TODO: Get triggered alarm and set alarm panel.
   if (am.evaluate()) {
